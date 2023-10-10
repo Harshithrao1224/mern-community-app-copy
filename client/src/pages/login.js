@@ -8,7 +8,7 @@ import "../styles/login.css";
 export const Login = () => {
     const [email, setemail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(""); // State for error message
+    const [error, setError] = useState(""); 
 
     const [_, setCookies] = useCookies(["access_token"]);
     const navigate = useNavigate();
