@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create a new recipe
+// Create a new post
 router.post("/", async (req, res) => {
   const post = new PostsModel({
     _id: new mongoose.Types.ObjectId(),
@@ -40,12 +40,11 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (err) {
-    // console.log(err);
     res.status(500).json(err);
   }
 });
 
-// Get a recipe by ID
+// Get a post by ID
 router.get("/:postId", async (req, res) => {
   try {
     const result = await PostsModel.findById(req.params.postId.trim());
@@ -55,7 +54,7 @@ router.get("/:postId", async (req, res) => {
   }
 });
 
-// Save a Recipe
+// Save a Post
 router.put("/", async (req, res) => {
   const post = await PostsModel.findById(req.body.postID.trim());
   const user = await UserModel.findById(req.body.userID.trim());
@@ -68,7 +67,7 @@ router.put("/", async (req, res) => {
   }
 });
 
-// Get id of saved recipes
+// Get id of saved posts
 router.get("/savedPosts/ids/:userId", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());
@@ -79,7 +78,7 @@ router.get("/savedPosts/ids/:userId", async (req, res) => {
   }
 });
 
-// Get saved recipes
+// Get saved posts
 router.get("/savedPosts/:userId", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());

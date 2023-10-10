@@ -48,7 +48,7 @@ export const Navbar = () => {
                                     className={`btn btn-danger ${!cookies.access_token ? 'd-none' : ''}`}
                                     onClick={() => logout()}
                                 >
-                                    Log out, {window.localStorage.getItem("userName")}
+                                    Log out, {window.sessionStorage.getItem("userName")}
                                 </button>
                             </li>
                         </>
