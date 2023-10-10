@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom';
 export const Navbar = () => {
     const [cookies, setCookies] = useCookies(["access_token"]);
     const navigate = useNavigate();
-
     const logout = () => {
         setCookies("access_token", "");
-        window.localStorage.removeItem("userID");
-        window.localStorage.removeItem("username");
+        window.sessionStorage.removeItem("userID");
+        window.sessionStorage.removeItem("username");
         navigate("/");
         window.location.reload(); 
     };

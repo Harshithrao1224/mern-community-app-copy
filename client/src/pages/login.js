@@ -22,8 +22,8 @@ export const Login = () => {
             });
 
             setCookies("access_token", response.data.token);
-            window.localStorage.setItem("userID", response.data.userID);
-            window.localStorage.setItem("userName", response.data.username);
+            window.sessionStorage.setItem("userID", response.data.userID);
+            window.sessionStorage.setItem("userName", response.data.username);
             navigate("/");
         } catch (error) {
             console.error(error);
