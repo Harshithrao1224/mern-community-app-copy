@@ -8,7 +8,7 @@ import { postsRouter } from './routes/posts.js';
 import { unsaveRouter } from './routes/unsave.js';
 dotenv.config()
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 
 // Allow server to accept json
 app.use(express.json());

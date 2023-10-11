@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import axios from "axios";
-
 export const Home = () => {
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);

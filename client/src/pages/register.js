@@ -78,7 +78,7 @@ export const Register = () => {
                 <p className="register-text">Already have an account?<Link className="register-link" to="/login">Sign In</Link></p>
             </div>
             <div className="col-md-6">
-                <img src={require("../assets/undraw_barbecue_3x93.svg").default} alt="login" />
+               <center><img src={require("../assets/community2.svg").default} alt="login" /></center>
             </div>
 
             <Modal show={showModal} onHide={handleCloseModal}>
