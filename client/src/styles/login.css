@@ -1,7 +1,6 @@
     .login {
     height: calc(100vh - 100px);
     display: flex;
-    width:100%;
     justify-content: center;
     align-items: center;
 }
@@ -79,4 +78,8 @@
     color: red;
     font-size: 12px;
     margin-top: 10px;
+}
+#logo{
+    height:30vh;
+    width:30vh;
 }

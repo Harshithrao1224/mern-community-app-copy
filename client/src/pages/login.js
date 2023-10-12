@@ -65,8 +65,7 @@ export const Login = () => {
                 </form>
                 <p className="register-text">Don't have an account?<Link className="register-link" to="/register">Sign Up</Link></p>
             </div>
-            <center>
-                <img src={require("../assets/community.svg").default} alt="login" /></center>
+    <img id="logo" src={require("../assets/community.svg").default} alt="login" />
         </div>
     );
 };
