@@ -51,6 +51,7 @@ export const Navbar = () => {
                                     Log out, {window.sessionStorage.getItem("userName")}
                                 </button>
                             </li>
+                            
                         </>
                     )}
                 </ul>

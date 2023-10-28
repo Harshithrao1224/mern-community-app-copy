@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import { PostsModel } from "../models/Posts.js";
 import { UserModel } from "../models/Users.js";
 import { verifyToken } from "./user.js";
@@ -77,7 +78,23 @@ router.get("/savedPosts/ids/:userId", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
+router.get('/search/:searchTerm', async (req, res) => {
+  const searchTerm = req.params.searchTerm.toString();
+  console.log(searchTerm);
+  try {
+    const results = await PostsModel.find({
+      $or: [
+        { title: { $regex: searchTerm, $options: 'i' } },
+        { description: { $regex: searchTerm, $options: 'i' } },
+        { tags: { $regex: searchTerm, $options: 'i' } }
+      ]
+    });
+    res.json(results);
+  } catch (error) {
+    console.error('Error searching for posts:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 // Get saved posts
 router.get("/savedPosts/:userId", async (req, res) => {
   try {

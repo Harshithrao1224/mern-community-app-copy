@@ -43,7 +43,7 @@ export const SavedPosts= () => {
           <p className="no-saved-recipes">No saved posts! Go to the<Link className="link" to="/">browse page</Link>to explore new posts!</p>
         ) : (
           savedPosts.map((post) => (
-            <li key={post._id} className="card mb-4">
+            <li key={post._id} className="cardu">
             <div className="card-body d-flex justify-content-between align-items-center">
               <div>
                 <h2 className="card-title">{post.title}</h2>
