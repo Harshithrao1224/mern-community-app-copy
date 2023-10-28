@@ -56,14 +56,14 @@ export const SavedPosts= () => {
               <div className="instructions">
                 <p className="card-text">{post.content}</p>
               </div>
-              <h5>Tags</h5>
+              <div className="tags">
               {
                 post.tags.map((tags) => (
                   <ul className="ingredient-list">
                     <li className="card-text">{tags}</li>
                   </ul>
                 ))
-              }
+              }</div>
              
             </div>
           </li>
