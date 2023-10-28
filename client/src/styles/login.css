@@ -1,4 +1,31 @@
-    .login {
+*{
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+}
+html,body{
+    height:100% ;
+}
+
+html{
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    width:100%;
+    height:100%;
+    background-attachment: fixed;
+}
+
+
+.form-container{
+    width: 400px;
+    margin: auto;
+    padding:36px 48px 48px 48px;
+    background-color: #f2efee;
+    border-radius :11px;
+    box-shadow: 0 2.4rem 4.8rem rgba(0,0,0,0.15);
+}
+.login {
     height: calc(100vh - 100px);
     display: flex;
     justify-content: center;
@@ -8,12 +35,16 @@
 .title {
     font-size: 48px;
     margin-bottom: 20px;
+    padding: 15px;
+    font-size: 34px;
+    font-weight: 600;
+    text-align: center;
 }
 
 .subtitle {
-    font-size: 18px;
-    color: rgb(128, 128, 128);
-    margin-bottom: 100px;
+    font-size: 30px;
+    color: blue;
+    margin-bottom: 10px;
 }
 
 .form-container {
@@ -25,27 +56,52 @@
 
 .form-label {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 20px;
     color: #303030;
-    margin-bottom: 5px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+    display: block;
+    margin-top: 10px;
+   
 }
 
 .form-input {
-    width: 100%;
+    width: 120%;
+    padding: 1.2rem;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #3111e6;
+    border-top: 1px solid #3111e6;
+    border-right: 0.5px solid blue;
+    border-left:0.5px solid blue ;
 }
-
+form input:focus{
+    outline: none;
+    box-shadow:0 0 0 4px rgba(36, 35, 35, 0.5) ;
+}
 .login-btn {
     margin-top: 20px;
     padding: 10px;
-    width: 100%;
+    width: 40%;
     border: none;
-    background-color: #00A35C;
-    color: #fff;
+    background-color:green;
     font-weight: bold;
     border-radius: 15px;
+    align-self:center
+   
+}.btn,
+.btn:link,
+.btn:visited{
+    display:inline-block;
+    text-decoration: none;
+    font-size:20px ;
+    font-weight: 600;
+    border-radius: 9px;
+    border: none;
+    cursor:pointer;
+    font-family: inherit;
+    transition: all 0.3s;
 }
+
 
 .login-btn:hover {
     transition: 0.3s all ease-in-out;
@@ -53,13 +109,18 @@
 }
 
 .register-text {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #303030;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #c75513;
+}
+h1
+{
+    margin-bottom: 100px;
 }
 
 .register-link {
-    font-size: 12px;
+    font-size: 20px;
     color: #00A35C;
     text-decoration: none;
     font-weight: bold;
@@ -78,8 +139,25 @@
     color: red;
     font-size: 12px;
     margin-top: 10px;
+    font-weight: bold;
 }
-#logo{
-    height:30vh;
-    width:30vh;
-}
+.password-input {
+    position: relative;
+  }
+ 
+  .show-password-icon {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #f70d0d;
+     font-size: 20px;
+     font-style: bold;
+     border:none;
+     background-color: none;
+     
+     
+  }
+ 
+ 
