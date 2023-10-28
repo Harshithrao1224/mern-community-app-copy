@@ -11,7 +11,7 @@ export const Login = () => {
     const [email, setemail] = useState("");
     const [password, setPassword] = useState('');
     const [error, setError] = useState("");
-
+// eslint-disable-next-line
     const [_, setCookies] = useCookies(["access_token"]);
     const navigate = useNavigate();
 
@@ -40,10 +40,10 @@ export const Login = () => {
        
 
     return (
-        <div className="login container row col-12">
+        <div className="login_container">
             <div className="form-container col-md-6 mt-5">
                 <h1 className="title">Sign In</h1>
-                <form onSubmit={onSubmit}>
+                <form id="form" onSubmit={onSubmit}>
                     <div className="mb-3">
                        
                         <label htmlFor="email" className="form-label">Email</label>

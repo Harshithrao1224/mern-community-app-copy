@@ -6,7 +6,11 @@
 html,body{
     height:100% ;
 }
-
+@media (min-width: 768px){
+.login_container {
+    flex: 0 0 auto;
+    width: 55%;
+}}
 html{
 
     background-repeat: no-repeat;
@@ -18,10 +22,10 @@ html{
 
 
 .form-container{
-    width: 400px;
+    width: 50%;
     margin: auto;
     padding:36px 48px 48px 48px;
-    background-color: #f2efee;
+    background-color: #eef2ee;
     border-radius :11px;
     box-shadow: 0 2.4rem 4.8rem rgba(0,0,0,0.15);
 }
@@ -48,6 +52,7 @@ html{
 }
 
 .form-container {
+    width:80%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -66,7 +71,7 @@ html{
 }
 
 .form-input {
-    width: 120%;
+    width: 100%;
     padding: 1.2rem;
     border: none;
     border-bottom: 1px solid #3111e6;
@@ -128,8 +133,7 @@ h1
 }
 
 .login-link {
-    font-size: 16px;
-    color: #00A35C;
+    color: #38f4a3;
     text-decoration: none;
     font-weight: bold;
     display: inline;
@@ -149,15 +153,14 @@ h1
     position: absolute;
     top: 50%;
     right: 5px;
+    background: none;
     transform: translateY(-50%);
     cursor: pointer;
     color: #f70d0d;
      font-size: 20px;
      font-style: bold;
      border:none;
-     background-color: none;
-     
-     
   }
- 
+
+
  

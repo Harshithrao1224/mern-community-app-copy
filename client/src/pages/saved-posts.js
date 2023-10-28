@@ -49,8 +49,10 @@ export const SavedPosts= () => {
                 <h2 className="card-title">{post.title}</h2>
                 <button onClick={() => unsavePost(post._id)}>Unsave</button>
               </div>
+              
             </div>
             <div className="card-body">
+            <img src={post.imageUrl} alt={post.title} className="img-fluid" />
               <div className="instructions">
                 <p className="card-text">{post.content}</p>
               </div>
@@ -62,7 +64,7 @@ export const SavedPosts= () => {
                   </ul>
                 ))
               }
-              <img src={post.imageUrl} alt={post.title} className="img-fluid" />
+             
             </div>
           </li>
           ))

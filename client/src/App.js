@@ -6,6 +6,7 @@ import { Register } from './pages/register';
 import { CreatePost } from './pages/create-post';
 import { SavedPosts } from './pages/saved-posts';
 import { Navbar } from './components/Navbar';
+//import { Navbar2 } from './components/Navbar2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

@@ -38,7 +38,7 @@ export const Register = () => {
             <div className="form-container col-md-6 mt-5">
                 <h1 className="title">Welcome here!</h1>
                 <p className="subtitle">Please enter your details</p>
-                <form onSubmit={onSubmit}>
+                <form id="form" onSubmit={onSubmit}>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input
@@ -77,9 +77,7 @@ export const Register = () => {
                 </form>
                 <p className="register-text">Already have an account?<Link className="register-link" to="/login">Sign In</Link></p>
             </div>
-            <div className="col-md-6">
-               <center><img src={require("../assets/community2.svg").default} alt="login" /></center>
-            </div>
+           
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
