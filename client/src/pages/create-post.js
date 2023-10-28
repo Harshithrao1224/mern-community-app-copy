@@ -89,50 +89,31 @@ export const CreatePost = () => {
                                 onChange={(event) => handleTagChange(event, index)}
                                 className="form-control"
                             />
-                            <div className="input-group-append">
-                                <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    onClick={() => handleRemoveTag(index)}
-                                >
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <button
-                    type="button"
-                    onClick={handleAddTag}
-                    className="btn btn-secondary mb-3"
-                >
-                    Add Tag
-                </button>
-
-                <div className="form-group">
-                    <label htmlFor="content">Content</label>
-                    <textarea
-                        id="content"
-                        name="content"
-                        value={post.content}
+     <div className="input-group-append">
+    <button       type="button" className="btn btn-danger"  onClick={() => handleRemoveTag(index)}>Remove</button>
+        </div>
+     </div>
+     ))}
+     </div>
+    <button type="button" onClick={handleAddTag} className="btn btn-secondary mb-3">Add Tag </button>
+  <div className="form-group">
+   <label htmlFor="content">Content</label>
+ <textarea
+ id="content"
+  name="content"
+ value={post.content}
+onChange={handleChange}
+ className="form-control"/></div>
+<div className="form-group">
+<label htmlFor="imageUrl">Image URL</label>
+<input
+   type="text"
+id="imageUrl"
+name="imageUrl"
+value={post.imageUrl}
                         onChange={handleChange}
                         className="form-control"
-                    ></textarea>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="imageUrl">Image URL</label>
-                    <input
-                        type="text"
-                        id="imageUrl"
-                        name="imageUrl"
-                        value={post.imageUrl}
-                        onChange={handleChange}
-                        className="form-control"
-                    />
-                </div>
-
-
+                    /></div>
                 <button type="submit" className="btn btn-primary">
                     Upload
                 </button>

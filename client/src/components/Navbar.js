@@ -43,6 +43,9 @@ export const Navbar = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/saved-posts">Saved Posts</Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/myposts">My Posts</Link>
+                            </li>
                             <li className="nav-item d-flex justify-content-center align-items-center">
                                 <button
                                     className={`btn btn-danger ${!cookies.access_token ? 'd-none' : ''}`}

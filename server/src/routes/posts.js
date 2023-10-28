@@ -31,12 +31,17 @@ router.post("/", async (req, res) => {
 
   try {
     const result = await post.save();
+    await UserModel.updateOne(
+      { _id: req.body.userOwner },
+      { $push: { myPosts: result._id } }
+    );
+
     res.status(201).json({
       createdPost: {
-        name: result.tile,
+        name: result.title,
         image: result.image,
         tags: result.tags,
-        body: result.body,
+        body: result.content,
         _id: result._id,
       },
     });
@@ -45,11 +50,35 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get a post by ID
+
 router.get("/:postId", async (req, res) => {
   try {
     const result = await PostsModel.findById(req.params.postId.trim());
     res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+//Update a post
+router.put("/:postId", async (req, res) => {
+  const { postId } = req.params;
+  const updatedPostData = req.body;
+
+  try {
+    const updatedPost = await PostsModel.findByIdAndUpdate(postId, updatedPostData, { new: true });
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    res.status(200).json({
+      updatedPost: {
+        title: updatedPost.title,
+        image: updatedPost.image,
+        tags: updatedPost.tags,
+        content: updatedPost.content,
+        _id: updatedPost._id,
+      },
+    });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -105,6 +134,35 @@ router.get("/savedPosts/:userId", async (req, res) => {
 
     console.log(savedPosts);
     res.status(201).json({ savedPosts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+router.get("/myPosts/:userId", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId.trim());
+    const myPosts = await PostsModel.find({
+      _id: { $in: user.myPosts },
+    });
+
+    console.log(myPosts);
+    res.status(201).json({ myPosts });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+router.delete("/myPosts/delete/:userId", async (req, res) => {
+  try {
+    const { postId } = req.body;
+    await UserModel.updateOne(
+      { _id: req.params.userId },
+      { $pull: { myPosts: postId } }
+    );
+    await PostsModel.deleteOne({ _id: postId });
+
+    res.status(200).json({ message: "Post deleted successfully." });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

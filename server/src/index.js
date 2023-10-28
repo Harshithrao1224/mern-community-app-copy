@@ -20,8 +20,7 @@ app.use("/posts", postsRouter);
 app.use("/posts/savedPosts",unsaveRouter);
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB)
-.then(() => {
+mongoose.connect(process.env.DB).then(() => {
     app.listen(port, () => { console.log(`Server running on port: ${port}`) });
 }).catch((error) => {
     console.log(error.message);
