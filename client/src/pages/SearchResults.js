@@ -47,7 +47,7 @@ useEffect(() => {
               {
                 post.tags.map((tags) => (
                   <ul className="ingredient-list">
-                    <li className="card-text">{tags}</li>
+                    <li className="card-text">#{tags}</li>
                   </ul>
                 ))
               }</div>

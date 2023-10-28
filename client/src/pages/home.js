@@ -86,7 +86,7 @@ className="img-fluid"
 <div className="tags">
 {post.tags.map((tag, index) => (
 <ul key={index} className="ingredient-list">
-<li className="card-text">{tag}</li>
+<li className="card-text">#{tag}</li>
 </ul>
 ))}</div>
 </div>

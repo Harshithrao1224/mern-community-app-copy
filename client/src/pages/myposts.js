@@ -61,7 +61,7 @@ export const MyPosts = () => {
                 <div className="tags">
                   {post.tags.map((tag) => (
                     <ul className="ingredient-list">
-                      <li className="card-text">{tag}</li>
+                      <li className="card-text">#{tag}</li>
                     </ul>
                   ))}
                 </div>
