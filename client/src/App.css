@@ -236,3 +236,12 @@ flex-wrap: wrap;
     width:60%;
     height:fit-content;
   }
+  .add-tag-button {
+    width:45px;
+    height: 4%;
+    padding: 0;
+    margin-left: 1vw;
+    text-align: center; /* Horizontally center the "+" symbol */
+    border-radius: 15px;
+  }
+  

@@ -34,7 +34,7 @@ export const Register = () => {
     };
 
     return (
-        <div className="login container row col-12">
+        <div className="login_container">
             <div className="form-container col-md-6 mt-5">
                 <h1 className="title">Welcome here!</h1>
                 <p className="subtitle">Please enter your details</p>

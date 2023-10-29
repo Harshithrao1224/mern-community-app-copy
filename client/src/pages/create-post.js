@@ -79,7 +79,10 @@ export const CreatePost = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="tags">Tags</label>
+                <div className="d-flex align-items-center">
+                        <label htmlFor="tags">Tags</label>
+                        <button type="button" onClick={handleAddTag} className="btn btn-secondary mb-3 add-tag-button">+</button>
+                    </div>
                     {post.tags.map((tag, index) => (
                         <div key={index} className="input-group mb-2">
                             <input
@@ -95,7 +98,6 @@ export const CreatePost = () => {
      </div>
      ))}
      </div>
-    <button type="button" onClick={handleAddTag} className="btn btn-secondary mb-3">Add Tag </button>
   <div className="form-group">
    <label htmlFor="content">Content</label>
  <textarea
