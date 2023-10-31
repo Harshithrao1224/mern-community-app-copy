@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom";
 export const MyPosts = () => {
   const [myPosts, setMyPosts] = useState([]);
   const userID = useGetUserID();
-
+  // eslint-disable-next-line
+  const [sortedByTags, setSortedByTags] = useState(false);
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
         const response = await axios.get(
           `http://localhost:4000/posts/myPosts/${userID}`
         );
-        setMyPosts(response.data.myPosts);
+        const sortedPosts = response.data.myPosts.sort((a, b) => b._id.localeCompare(a._id));
+        setMyPosts(sortedPosts);
       } catch (err) {
         console.log(err);
       }
@@ -37,15 +39,36 @@ export const MyPosts = () => {
   const handleEditPost = (postId) => {
     navigate(`/editPost/${postId}`);
   };
+  const sortPostsByTags = () => {
+    const sortedPosts = [...myPosts].sort((a, b) => {
+      // Convert tags to lowercase and join them into a string for comparison
+      const aTags = a.tags.map(tag => tag.toLowerCase()).join();
+      const bTags = b.tags.map(tag => tag.toLowerCase()).join();
+      return aTags.localeCompare(bTags);
+    });
+    setMyPosts(sortedPosts);
+    setSortedByTags(true);
+  };
+
+  const sortPostsById = () => {
+    const sortedPosts = [...myPosts].sort((a, b) => b._id.localeCompare(a._id));
+    setMyPosts(sortedPosts);
+    setSortedByTags(false);
+  };
   return (
     <div className="home-container">
       <h1 className="mt-4">My Posts</h1>
+      <button onClick={sortedByTags ? sortPostsById : sortPostsByTags}>
+            {sortedByTags ? 'Show Latest Posts' : 'Sort Posts By Tags'}
+          </button>
       <ul className="list-unstyled">
         {myPosts.length === 0 ? (
-          <p className="no-posts">No posts yet! Go to the<Link className="link" to="/">browse page</Link>to explore new posts!</p>
+          <p className="no-posts">No posts yet! Go to the<Link className="link" to="/create-post">Create Post</Link>to create your first post!</p>
         ) : (
+          
           myPosts.map((post) => (
             <li key={post._id} className="cardu">
+              
               <div className="card-body d-flex justify-content-between align-items-center">
                 <div>
                   <h2 className="card-title">{post.title}</h2>

@@ -8,7 +8,9 @@
   Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   
   }
-  
+  textarea{
+    height: 200px;;
+  }
   body {
   margin: 0;
   padding: 0;

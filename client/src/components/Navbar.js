@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import {useEffect,useState} from "react";
 export const Navbar = () => {
     const [cookies, setCookies] = useCookies(["access_token"]);
     const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    useEffect(() => {
+        var storedUsername = window.sessionStorage.getItem("userName");
+        if (storedUsername) {
+          setUsername(storedUsername);
+        }
+      }, []);
     const logout = () => {
         setCookies("access_token", "");
         window.sessionStorage.removeItem("userID");
@@ -12,7 +19,8 @@ export const Navbar = () => {
         navigate("/");
         window.location.reload(); 
     };
-
+    
+    
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
             <Link className="navbar-brand" to="/">Home</Link>
@@ -51,7 +59,7 @@ export const Navbar = () => {
                                     className={`btn btn-danger ${!cookies.access_token ? 'd-none' : ''}`}
                                     onClick={() => logout()}
                                 >
-                                    Log out, {window.sessionStorage.getItem("userName")}
+                                    Log out, {username}
                                 </button>
                             </li>
                             

@@ -6,13 +6,16 @@ import dotenv from 'dotenv';
 import { userRouter } from './routes/user.js';
 import { postsRouter } from './routes/posts.js';
 import { unsaveRouter } from './routes/unsave.js';
+
 dotenv.config()
 const app = express();
 const port = process.env.PORT;
 
-// Allow server to accept json
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // replace with your React app's URL
+  credentials: true,
+}));
 
 // Routes
 app.use("/auth", userRouter);
@@ -24,5 +27,5 @@ mongoose.connect(process.env.DB).then(() => {
     app.listen(port, () => { console.log(`Server running on port: ${port}`) });
 }).catch((error) => {
     console.log(error.message);
-});
-
+}
+);

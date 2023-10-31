@@ -40,18 +40,33 @@ router.post("/login", async (req, res) => {
   res.json({ token, userID: user._id,username:user.username });
 });
 
-export { router as userRouter };
-
-export const verifyToken = (req, res, next) => {
+export const verifyToken=(req, res, next)=>{
   const authHeader = req.headers.authorization;
   if (authHeader) {
-    jwt.verify(authHeader, process.env.SECRET, (err) => {
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, process.env.SECRET, (err, user) => {
       if (err) {
         return res.sendStatus(403);
       }
+      req.userId = user.id;
       next();
     });
   } else {
     res.sendStatus(401);
   }
 };
+router.post('/auto-login', verifyToken, async (req, res) => {
+  try {
+    console.log("Trying auto-login");
+    const user = await UserModel.findById(req.userId); // replace with your method of finding user by id
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ userID: user._id, username: user.username });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+export { router as userRouter };

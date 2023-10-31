@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../App.css";
+import { useCookies } from "react-cookie";
+import { useGetUserID } from "../hooks/useGetUserID";
 import { useParams } from "react-router-dom";
 export const SearchResults = () => {
+  const userID = useGetUserID();
+  const [isLoggedIn,setIsLoggedIn] = useState(!!userID);
+  const [cookies] = useCookies(['access_token']);
   const [searchResults, setSearchResults] = useState([]);
 const {searchTerm}=useParams();
-console.log(searchTerm);
+const [savedPosts, setSavedPosts] = useState([]);
+const isPostSaved = (id) => savedPosts.includes(id);
 useEffect(() => {
+  setIsLoggedIn(!!userID);
   const fetchSearchResults = async () => {
     try {
       console.log(searchTerm);
@@ -21,8 +28,83 @@ useEffect(() => {
   if (searchTerm) {
     fetchSearchResults();
   }
-}, [searchTerm])
+  const fetchSavedPosts = async () => {
+    try {
+    const response = await axios.get(
+    `http://localhost:4000/posts/savedPosts/ids/${userID}`
+    );
+    setSavedPosts(response.data.savedPosts);
+    } catch (err) {
+    console.log(err);
+    }
+    };
+  if (isLoggedIn) {
+    fetchSavedPosts();
+    } else {
+    setSavedPosts([]);
+    }
+}, [searchTerm,userID,isLoggedIn])
+const likePost = async (postID) => {
+  const postIndex = searchResults.findIndex(post => post._id === postID);
+  if (!searchResults[postIndex].likes.includes(userID)) {
+    try {
+      const response = await axios.put('http://localhost:4000/posts/like', {
+        postID,
+        userID,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${cookies.access_token}`
+        },
+        withCredentials: true
+      });
 
+      const updatedPosts = [...searchResults];
+      updatedPosts[postIndex].likes.push(userID);
+      updatedPosts[postIndex].likesCount = response.data.likesCount;
+      setSearchResults(updatedPosts);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
+
+
+
+const savePost = async (postID) => {
+  try {
+  const response = await axios.put("http://localhost:4000/posts", {
+  postID,
+  userID,
+  });
+  setSavedPosts(response.data.savedPosts);
+  } catch (err) {
+  console.log(err);
+  }
+  };
+const unlikePost = async (postID) => {
+  const postIndex = searchResults.findIndex(post => post._id === postID);
+  if (searchResults[postIndex].likes.includes(userID)) {
+    try {
+      const response = await axios.put('http://localhost:4000/posts/unlike', {
+        postID,
+        userID,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${cookies.access_token}`
+        },
+        withCredentials: true
+      });
+
+      const updatedPosts = [...searchResults];
+      const userIndex = updatedPosts[postIndex].likes.indexOf(userID);
+      updatedPosts[postIndex].likes.splice(userIndex, 1);
+      updatedPosts[postIndex].likesCount = response.data.likesCount;
+      setSearchResults(updatedPosts);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+};
   return (
     <div className="home-container">
       <h1>Search Results</h1>
@@ -35,12 +117,38 @@ useEffect(() => {
             <div className="card-body d-flex justify-content-between align-items-center">
               <div>
                 <h2 className="card-title">{post.title}</h2>
+                <p>Posted by: {post.userOwner.username}</p>
               </div>
               
+{isLoggedIn && (
+<button
+onClick={() => savePost(post._id)}
+className={`btn ${
+isPostSaved(post._id) ? "btn-success" : "btn-primary"
+}`}
+disabled={isPostSaved(post._id)}
+>
+{isPostSaved(post._id) ? "Saved" : "Save"}
+</button>
+)}
             </div>
             <div className="card-body">
             <img src={post.imageUrl} alt={post.title} className="img-fluid" />
               <div className="instructions">
+              {isLoggedIn && (
+  <>
+    {post.likes.includes(userID) ? (
+      <button onClick={() => unlikePost(post._id)}>
+        Unlike
+      </button>
+    ) : (
+      <button onClick={() => likePost(post._id)}>
+        Like
+      </button>
+    )}
+    <span>{post.likesCount} likes</span>
+  </>
+)}
                 <p className="card-text">{post.content}</p>
               </div>
               <div className="tags">

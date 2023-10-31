@@ -9,15 +9,53 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const result = await PostsModel.find({});
+    const result = await PostsModel.find({}).populate({
+      path: 'userOwner',
+      select: 'username -_id'
+    });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+router.put('/like',verifyToken, async (req, res) => {
+  const { postID, userID } = req.body;
 
+  try {
+    const post = await PostsModel.findById(postID);
+    if (!post.likes.includes(userID)) {
+      post.likes.push(userID);
+      post.likesCount += 1; // Increment likesCount
+      await post.save();
+    }
+
+    res.json({ likesCount: post.likesCount }); // Return the updated likesCount
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+router.put('/unlike',verifyToken, async (req, res) => {
+  const { postID, userID } = req.body;
+
+  try {
+    const post = await PostsModel.findById(postID);
+    if (post.likes.includes(userID)) {
+      const index = post.likes.indexOf(userID);
+      post.likes.splice(index, 1);
+      post.likesCount -= 1; // Decrement likesCount
+      await post.save();
+    }
+
+    res.json({ likesCount: post.likesCount }); // Return the updated likesCount
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
 // Create a new post
-router.post("/", async (req, res) => {
+router.post("/",verifyToken, async (req, res) => {
   const post = new PostsModel({
     _id: new mongoose.Types.ObjectId(),
     title: req.body.title,
@@ -117,6 +155,9 @@ router.get('/search/:searchTerm', async (req, res) => {
         { description: { $regex: searchTerm, $options: 'i' } },
         { tags: { $regex: searchTerm, $options: 'i' } }
       ]
+    }).populate({
+      path: 'userOwner',
+      select: 'username -_id'
     });
     res.json(results);
   } catch (error) {
@@ -130,6 +171,9 @@ router.get("/savedPosts/:userId", async (req, res) => {
     const user = await UserModel.findById(req.params.userId.trim());
     const savedPosts = await PostsModel.find({
       _id: { $in: user.savedPosts },
+    }).populate({
+      path: 'userOwner',
+      select: 'username -_id'
     });
 
     console.log(savedPosts);
@@ -139,6 +183,7 @@ router.get("/savedPosts/:userId", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 router.get("/myPosts/:userId", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());

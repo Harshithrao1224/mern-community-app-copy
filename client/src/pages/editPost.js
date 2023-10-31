@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams,useNavigate } from "react-router-dom";
-
+import { useCookies } from "react-cookie";
 export const EditPost = () => {
     const navigate=useNavigate();
   const [post, setPost] = useState(null);
   const { postId } = useParams();
+  const [cookies] = useCookies(['access_token']);
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/posts/${postId}`);
+        const token = cookies.access_token;
+        const response = await axios.get(`http://localhost:4000/posts/${postId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          withCredentials: true
+        });
         setPost(response.data);
       } catch (err) {
         console.log(err);
@@ -17,7 +24,7 @@ export const EditPost = () => {
     };
 
     fetchPost();
-  }, [postId]);
+  }, [postId,cookies]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -82,8 +89,11 @@ export const EditPost = () => {
             />
         </div>
 
-        <div className="form-group">
-            <label htmlFor="tags">Tags</label>
+          <div className="form-group">
+                <div className="d-flex align-items-center">
+                        <label htmlFor="tags">Tags</label>
+                        <button type="button" onClick={handleAddTag} className="btn btn-secondary mb-3 add-tag-button">+</button>
+                    </div>
             {post.tags.map((tag, index) => (
                 <div key={index} className="input-group mb-2">
                     <input
@@ -94,7 +104,7 @@ export const EditPost = () => {
                         className="form-control"
                     />
 <div className="input-group-append">
-<button       type="button" className="btn btn-danger"  onClick={() => handleRemoveTag(index)}>Remove</button>
+<button       type="button" className="btn btn-danger"  onClick={() => handleRemoveTag(index)}>-</button>
 </div>
 </div>
 ))}

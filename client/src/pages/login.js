@@ -25,8 +25,14 @@ export const Login = () => {
                 email,
                 password
             });
+            const oneWeekFromNow = new Date();
+            oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
 
-            setCookies("access_token", response.data.token);
+            setCookies("access_token", response.data.token, {
+             path: "/",
+            expires: oneWeekFromNow
+                });
+
             window.sessionStorage.setItem("userID", response.data.userID);
             window.sessionStorage.setItem("userName", response.data.username);
             navigate("/");

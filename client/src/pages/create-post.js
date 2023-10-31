@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
-
+import { useCookies } from "react-cookie";
 export const CreatePost = () => {
     const userID = useGetUserID();
-
+    const [cookies] = useCookies(['access_token']);
     const [post, setPost] = useState({
         title: "",
         tags: [],
@@ -53,8 +53,14 @@ export const CreatePost = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(post);
+        const token = cookies.access_token;
         try {
-            await axios.post("http://localhost:4000/posts", post);
+            await axios.post("http://localhost:4000/posts", post, {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                },
+                withCredentials: true
+              });
             alert("Post uploaded!");
             navigate("/");
         } catch (error) {
@@ -93,7 +99,7 @@ export const CreatePost = () => {
                                 className="form-control"
                             />
      <div className="input-group-append">
-    <button       type="button" className="btn btn-danger"  onClick={() => handleRemoveTag(index)}>Remove</button>
+    <button       type="button" className="btn btn-danger"  onClick={() => handleRemoveTag(index)}>-</button>
         </div>
      </div>
      ))}

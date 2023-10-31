@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 const PostsSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -22,6 +21,13 @@ const PostsSchema = new mongoose.Schema({
         ref: 'users',
         required: true,
     },
+    likesCount: {
+        type: Number,
+        default: 0,
+    },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+    }],
 });
-
 export const PostsModel = mongoose.model("posts", PostsSchema);
