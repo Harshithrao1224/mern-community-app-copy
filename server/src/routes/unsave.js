@@ -1,8 +1,8 @@
 import express from 'express';
-
+import { verifyToken } from './user.js';
 import { UserModel } from "../models/Users.js";
 const router = express.Router();
-router.delete('/unsave/:userId', async (req, res) => {
+router.delete('/unsave/:userId',verifyToken, async (req, res) => {
   const { userId } = req.params;
   const { postId } = req.body;
 

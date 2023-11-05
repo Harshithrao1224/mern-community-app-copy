@@ -12,7 +12,7 @@ export const MyPosts = () => {
     const fetchMyPosts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/posts/myPosts/${userID}`
+          `https://localhost:4000/posts/myPosts/${userID}`,{withCredentials:true}
         );
         const sortedPosts = response.data.myPosts.sort((a, b) => b._id.localeCompare(a._id));
         setMyPosts(sortedPosts);
@@ -27,14 +27,15 @@ export const MyPosts = () => {
   const deletePost = async (postId) => {
     try {
       await axios.delete(
-        `http://localhost:4000/posts/myPosts/delete/${userID}`,
-        { data: { postId } }
+        `https://localhost:4000/posts/myPosts/delete/${userID}`,
+        { data: { postId }, withCredentials: true }
       );
       setMyPosts(myPosts.filter((post) => post._id !== postId));
     } catch (err) {
       console.log(err);
     }
   };
+  
   const navigate = useNavigate();
   const handleEditPost = (postId) => {
     navigate(`/editPost/${postId}`);
@@ -72,8 +73,8 @@ export const MyPosts = () => {
               <div className="card-body d-flex justify-content-between align-items-center">
                 <div>
                   <h2 className="card-title">{post.title}</h2>
-                  <button onClick={() => deletePost(post._id)}>Delete</button>
-                  <button onClick={() => handleEditPost(post._id)}>Edit</button>
+                  <button onClick={() => deletePost(post._id)} className="card-title-del">Delete</button>
+                  <button onClick={() => handleEditPost(post._id)}className="card-title-edit">Edit</button>
                 </div>
               </div>
               <div className="card-body">

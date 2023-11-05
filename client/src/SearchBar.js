@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import {useNavigate } from 'react-router-dom';
 
 export const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+const [searchTerm, setSearchTerm] = useState('');
+const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (searchTerm.trim() !== "") {
-      navigate(`/searchresults/${searchTerm}`);
-    }
-  };
+const handleSearchChange = (event) => {
+setSearchTerm(event.target.value);
+}
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button type="submit" disabled={!searchTerm.trim()}>Search</button>
-    </form>
-  );
-};
+const handleSearchSubmit = (event) => {
+event.preventDefault();
+navigate(`/searchresults/${searchTerm}`);
+}
+
+return (
+<form className='search-bar'
+ onSubmit={handleSearchSubmit}>
+<input type="text" placeholder=" Search..."
+value={searchTerm}
+onChange={handleSearchChange}
+/>
+<button type="submit" className='search-button'>Search</button>
+</form>
+);
+}

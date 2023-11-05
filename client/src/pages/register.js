@@ -17,11 +17,9 @@ export const Register = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post("http://localhost:4000/auth/register", {
+            await axios.post("https://localhost:4000/auth/register", {
                 email,username,password
             });
-
-            // Show the modal after successful registration
             setShowModal(true);
         } catch(error) {
             console.error(error);
@@ -42,7 +40,7 @@ export const Register = () => {
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input
-                            type="text"
+                            type="email"
                             className="form-input"
                             id="email"
                             value={email}

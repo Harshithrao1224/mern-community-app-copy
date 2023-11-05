@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+
 export const CreatePost = () => {
     const userID = useGetUserID();
-    const [cookies] = useCookies(['access_token']);
+    
     const [post, setPost] = useState({
         title: "",
         tags: [],
@@ -53,12 +53,8 @@ export const CreatePost = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(post);
-        const token = cookies.access_token;
         try {
-            await axios.post("http://localhost:4000/posts", post, {
-                headers: {
-                  'Authorization': `Bearer ${token}`
-                },
+            await axios.post("https://localhost:4000/posts", post, {
                 withCredentials: true
               });
             alert("Post uploaded!");

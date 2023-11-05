@@ -13,7 +13,7 @@ export const SavedPosts= () => {
     const fetchSavedPosts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/posts/savedPosts/${userID}`
+          `https://localhost:4000/posts/savedPosts/${userID}`,{withCredentials:true}
         );
         const sortedPosts = response.data.savedPosts.sort((a, b) => b._id.localeCompare(a._id));
         setSavedPosts(sortedPosts);
@@ -27,8 +27,8 @@ export const SavedPosts= () => {
   const unsavePost = async (postId) => {
     try {
       await axios.delete(
-        `http://localhost:4000/posts/savedPosts/unsave/${userID}`,
-        { data: { postId } }
+        `https://localhost:4000/posts/savedPosts/unsave/${userID}`,
+        { data: { postId },withCredentials:true}
       );
       setSavedPosts(savedPosts.filter((post) => post._id !== postId));
     } catch (err) {
@@ -68,7 +68,7 @@ export const SavedPosts= () => {
               <div>
                 <h2 className="card-title">{post.title}</h2>
                 <p>Posted by: {post.userOwner.username}</p>
-                <button onClick={() => unsavePost(post._id)}>Unsave</button>
+                <button onClick={() => unsavePost(post._id)}className="card-title-unsave">Unsave</button>
               </div>
               
             </div>

@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
   await newUser.save();
   res.json({ message: "User registered successfully" });
 });
-
+/*
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -54,11 +54,62 @@ export const verifyToken=(req, res, next)=>{
   } else {
     res.sendStatus(401);
   }
+};*/
+export const verifyToken = (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (token) {
+    jwt.verify(token, process.env.SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+
+      console.log("Authorized");
+      req.userId = user.id;
+      next();
+    });
+  } else {
+    console.log("Unauthorized: No token provided");
+    res.sendStatus(401);
+  }
 };
-router.post('/auto-login', verifyToken, async (req, res) => {
+router.post("/logout",verifyToken, (req, res) => {
+  res.clearCookie('access_token');
+  res.sendStatus(200);
+});
+
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await UserModel.findOne({ email });
+
+  if (!user) {
+    return res
+      .status(400)
+      .json({ message: "email or password is incorrect" });
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res
+      .status(400)
+      .json({ message: "email or password is incorrect" });
+  }
+
+  const token = jwt.sign({ id: user._id }, process.env.SECRET);
+
+  res.cookie('access_token', token, {
+    httpOnly: true,
+    sameSite: 'None',
+    secure:true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+  
+  res.json({ userID: user._id, username: user.username });
+});
+
+router.get('/auto-login', verifyToken, async (req, res) => {
   try {
     console.log("Trying auto-login");
-    const user = await UserModel.findById(req.userId); // replace with your method of finding user by id
+    const user = await UserModel.findById(req.userId); 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

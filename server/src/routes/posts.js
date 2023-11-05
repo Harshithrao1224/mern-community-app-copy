@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
 import { PostsModel } from "../models/Posts.js";
 import { UserModel } from "../models/Users.js";
 import { verifyToken } from "./user.js";
@@ -98,7 +97,7 @@ router.get("/:postId", async (req, res) => {
   }
 });
 //Update a post
-router.put("/:postId", async (req, res) => {
+router.put("/:postId",verifyToken, async (req, res) => {
   const { postId } = req.params;
   const updatedPostData = req.body;
 
@@ -107,7 +106,6 @@ router.put("/:postId", async (req, res) => {
     if (!updatedPost) {
       return res.status(404).json({ message: "Post not found" });
     }
-
     res.status(200).json({
       updatedPost: {
         title: updatedPost.title,
@@ -123,7 +121,7 @@ router.put("/:postId", async (req, res) => {
 });
 
 // Save a Post
-router.put("/", async (req, res) => {
+router.put("/", verifyToken,async (req, res) => {
   const post = await PostsModel.findById(req.body.postID.trim());
   const user = await UserModel.findById(req.body.userID.trim());
   try {
@@ -136,7 +134,7 @@ router.put("/", async (req, res) => {
 });
 
 // Get id of saved posts
-router.get("/savedPosts/ids/:userId", async (req, res) => {
+router.get("/savedPosts/ids/:userId",verifyToken, async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());
     res.status(201).json({ savedPosts: user?.savedPosts });
@@ -166,7 +164,7 @@ router.get('/search/:searchTerm', async (req, res) => {
   }
 })
 // Get saved posts
-router.get("/savedPosts/:userId", async (req, res) => {
+router.get("/savedPosts/:userId",verifyToken, async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());
     const savedPosts = await PostsModel.find({
@@ -184,7 +182,7 @@ router.get("/savedPosts/:userId", async (req, res) => {
   }
 });
 
-router.get("/myPosts/:userId", async (req, res) => {
+router.get("/myPosts/:userId",verifyToken, async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userId.trim());
     const myPosts = await PostsModel.find({
@@ -198,7 +196,7 @@ router.get("/myPosts/:userId", async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.delete("/myPosts/delete/:userId", async (req, res) => {
+router.delete("/myPosts/delete/:userId",verifyToken, async (req, res) => {
   try {
     const { postId } = req.body;
     await UserModel.updateOne(

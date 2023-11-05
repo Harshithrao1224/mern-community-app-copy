@@ -1,45 +1,35 @@
-import React, { useState } from "react";
-
-
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import { AuthContext } from '../hooks/AuthProvider'; 
 
 import "../styles/login.css";
 
 export const Login = () => {
-    const [email, setemail] = useState("");
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState("");
-// eslint-disable-next-line
-    const [_, setCookies] = useCookies(["access_token"]);
-    const navigate = useNavigate();
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const { setIsLoggedIn } = useContext(AuthContext);
 
-    const [showPassword, setShowPassword] = useState(false);
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+            const response = await axios.post("https://localhost:4000/auth/login", {
+        email,
+        password
+      },{withCredentials:true});
+      window.sessionStorage.setItem("userID", response.data.userID);
+      window.sessionStorage.setItem("userName", response.data.username);
+      setIsLoggedIn(true);
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      setError("Login failed. Please check your email and password."); 
+    }
+  };
 
-
-    const onSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post("http://localhost:4000/auth/login", {
-                email,
-                password
-            });
-            const oneWeekFromNow = new Date();
-            oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
-
-            setCookies("access_token", response.data.token, {
-             path: "/",
-            expires: oneWeekFromNow
-                });
-
-            window.sessionStorage.setItem("userID", response.data.userID);
-            window.sessionStorage.setItem("userName", response.data.username);
-            navigate("/");
-        } catch (error) {
-            console.error(error);
-            setError("Login failed. Please check your email and password."); 
-        }};
         const togglePassword = () => {
             setShowPassword((showPassword) => !showPassword);
           };
@@ -51,21 +41,17 @@ export const Login = () => {
                 <h1 className="title">Sign In</h1>
                 <form id="form" onSubmit={onSubmit}>
                     <div className="mb-3">
-                       
                         <label htmlFor="email" className="form-label">Email</label>
-                       
                         <input
-                            type="text"
+                            type="email"
                             className="form-input"
                             id="email"
                             placeholder="me@example.com"
                             value={email}
                             onChange={(event) => setemail(event.target.value)}
-                            required
-                           
+                            required                           
                         />
-                    </div>
-               
+                    </div>              
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">Password</label>
                         <div className="password-input">
@@ -79,17 +65,14 @@ export const Login = () => {
                             onChange={(event) => setPassword(event.target.value)}
                             required
                         />
-                       
                         <button
                        type="button" className="show-password-icon"
                         onClick={togglePassword}
                         >
                             {showPassword?'hide':'show'}
                         </button>
-                        </div>
-                   
-                    </div>
-                 
+                        </div>                   
+                    </div>                
                     <button type="submit" className="login-btn">LOG IN</button>
                        
                     </form>

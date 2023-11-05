@@ -1,41 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useGetUserID } from "../hooks/useGetUserID";
-import { useCookies } from "react-cookie";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from '../hooks/AuthProvider'; // replace with actual path to AuthContext
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGetUserID } from "../hooks/useGetUserID";
 export const Home = () => {
   const [posts, setPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const userID = useGetUserID();
-  const [isLoggedIn,setIsLoggedIn] = useState(!!userID);
-  const [cookies] = useCookies(['access_token']);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const userID = useGetUserID();
   const [sortedByTags, setSortedByTags] = useState(false);
   useEffect(() => {
-    const token = cookies.access_token;
-  setIsLoggedIn(!!userID);
-  if (!isLoggedIn && token) {
+  if (!isLoggedIn) {
     const autoLogin = async () => {
       try {
-        const response = await axios.post('http://localhost:4000/auth/auto-login', {}, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          withCredentials: true
-        });
-        // Handle successful login here
+       const response= await axios.get('https://localhost:4000/auth/auto-login', { withCredentials: true });
         window.sessionStorage.setItem("userID", response.data.userID);
         window.sessionStorage.setItem("userName", response.data.username);
         window.location.reload(true);
+        setIsLoggedIn(true);
       } catch (error) {
-        // Handle login error here
+        console.log("Not valid");
       }
     };
     autoLogin();
   }
 const fetchPosts = async () => {
 try {
-const response = await axios.get("http://localhost:4000/posts");
+const response = await axios.get("https://localhost:4000/posts");
 const sortedPosts = response.data.sort((a, b) => b._id.localeCompare(a._id));
 setPosts(sortedPosts);
 } catch (err) {
@@ -46,7 +38,7 @@ console.log(err);
 const fetchSavedPosts = async () => {
 try {
 const response = await axios.get(
-`http://localhost:4000/posts/savedPosts/ids/${userID}`
+`https://localhost:4000/posts/savedPosts/ids/${userID}`,{withCredentials:true}
 );
 setSavedPosts(response.data.savedPosts);
 } catch (err) {
@@ -60,14 +52,14 @@ fetchSavedPosts();
 } else {
 setSavedPosts([]);
 }
-}, [userID, isLoggedIn,cookies,navigate]);
+}, [userID, isLoggedIn,setIsLoggedIn,navigate]);
 
 const savePost = async (postID) => {
 try {
-const response = await axios.put("http://localhost:4000/posts", {
+const response = await axios.put("https://localhost:4000/posts", {
 postID,
 userID,
-});
+},{withCredentials:true});
 setSavedPosts(response.data.savedPosts);
 } catch (err) {
 console.log(err);
@@ -94,14 +86,10 @@ const likePost = async (postID) => {
     const postIndex = posts.findIndex(post => post._id === postID);
     if (!posts[postIndex].likes.includes(userID)) {
       try {
-        const response = await axios.put('http://localhost:4000/posts/like', {
+        const response = await axios.put('https://localhost:4000/posts/like', {
           postID,
           userID,
-        }, {
-          headers: {
-            'Authorization': `Bearer ${cookies.access_token}`
-          },
-          withCredentials: true
+        }, {          withCredentials: true
         });
   
         const updatedPosts = [...posts];
@@ -118,14 +106,10 @@ const likePost = async (postID) => {
     const postIndex = posts.findIndex(post => post._id === postID);
     if (posts[postIndex].likes.includes(userID)) {
       try {
-        const response = await axios.put('http://localhost:4000/posts/unlike', {
+        const response = await axios.put('https://localhost:4000/posts/unlike', {
           postID,
           userID,
-        }, {
-          headers: {
-            'Authorization': `Bearer ${cookies.access_token}`
-          },
-          withCredentials: true
+        }, {          withCredentials: true
         });
   
         const updatedPosts = [...posts];
@@ -181,15 +165,15 @@ className="img-fluid"
 {isLoggedIn && (
   <>
     {post.likes.includes(userID) ? (
-      <button onClick={() => unlikePost(post._id)}>
+      <button onClick={() => unlikePost(post._id)}className="unlike">
         Unlike
       </button>
     ) : (
-      <button onClick={() => likePost(post._id)}>
+      <button onClick={() => likePost(post._id)}className="like">
         Like
       </button>
     )}
-    <span>{post.likesCount} likes</span>
+    <span className="like-count">{post.likesCount} likes</span>
   </>
 )}
 <p className="card-text">{post.content}</p>

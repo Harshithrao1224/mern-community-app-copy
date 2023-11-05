@@ -11,29 +11,34 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { SearchResults } from './pages/SearchResults';
 import { MyPosts } from './pages/myposts';
 import { EditPost } from './pages/editPost';
-import useAuth from './useAuth';
+import { AuthProvider, AuthContext } from './hooks/AuthProvider'; 
+import React, { useContext } from 'react';
 
 function App() {
-  const isAuthenticated = useAuth();
-
   return (
-    <div className="App">
-     <Router>
+    <AuthProvider>
+      <Router>
         <Navbar />
         <SearchBar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/create-post" element={isAuthenticated ? <CreatePost /> : <Login />} />
-          <Route path="/saved-posts" element={isAuthenticated ? <SavedPosts /> : <Login />} />
-          <Route path="/myposts" element={isAuthenticated ? <MyPosts /> : <Login />} />
+          <Route path="/create-post" element={<ProtectedRoute component={CreatePost} />} />
+          <Route path="/saved-posts" element={<ProtectedRoute component={SavedPosts} />} />
+          <Route path="/myposts" element={<ProtectedRoute component={MyPosts} />} />
           <Route path="/searchresults/:searchTerm" element={<SearchResults />} />
-          <Route path="/editPost/:postId" element={isAuthenticated ? <EditPost/> : <Login />}/>
+          <Route path="/editPost/:postId" element={<ProtectedRoute component={EditPost} />} />
         </Routes>
       </Router>
-    </div>
+    </AuthProvider>
   );
 }
+
+const ProtectedRoute = ({ component: Component }) => {
+  const { isLoggedIn } = useContext(AuthContext);
+
+  return isLoggedIn ? <Component /> : <Login />;
+};
 
 export default App;

@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams,useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 export const EditPost = () => {
     const navigate=useNavigate();
   const [post, setPost] = useState(null);
   const { postId } = useParams();
-  const [cookies] = useCookies(['access_token']);
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const token = cookies.access_token;
-        const response = await axios.get(`http://localhost:4000/posts/${postId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
+        const response = await axios.get(`https://localhost:4000/posts/${postId}`,{}, {
           withCredentials: true
         });
         setPost(response.data);
@@ -24,7 +18,7 @@ export const EditPost = () => {
     };
 
     fetchPost();
-  }, [postId,cookies]);
+  }, [postId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -63,9 +57,9 @@ export const EditPost = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`http://localhost:4000/posts/${postId}`, post);
+      await axios.put(`https://localhost:4000/posts/${postId}`, post,{withCredentials:true});
       alert("Post updated!");
-      navigate("/");
+      navigate("/myposts");
     } catch (error) {
       console.error(error);
     }

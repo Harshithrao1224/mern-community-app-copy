@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../App.css";
-import { useCookies } from "react-cookie";
+import { AuthContext } from "../hooks/AuthProvider";
 import { useGetUserID } from "../hooks/useGetUserID";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
 export const SearchResults = () => {
   const userID = useGetUserID();
-  const [isLoggedIn,setIsLoggedIn] = useState(!!userID);
-  const [cookies] = useCookies(['access_token']);
+  //eslint-disable-next-line
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const [searchResults, setSearchResults] = useState([]);
 const {searchTerm}=useParams();
 const [savedPosts, setSavedPosts] = useState([]);
 const isPostSaved = (id) => savedPosts.includes(id);
 useEffect(() => {
-  setIsLoggedIn(!!userID);
   const fetchSearchResults = async () => {
     try {
       console.log(searchTerm);
-      const response = await axios.get(`http://localhost:4000/posts/search/${searchTerm}`);
+      const response = await axios.get(`https://localhost:4000/posts/search/${searchTerm}`);
       setSearchResults(response.data);
 
     } catch (err) {
@@ -31,7 +31,7 @@ useEffect(() => {
   const fetchSavedPosts = async () => {
     try {
     const response = await axios.get(
-    `http://localhost:4000/posts/savedPosts/ids/${userID}`
+    `https://localhost:4000/posts/savedPosts/ids/${userID}`
     );
     setSavedPosts(response.data.savedPosts);
     } catch (err) {
@@ -48,13 +48,11 @@ const likePost = async (postID) => {
   const postIndex = searchResults.findIndex(post => post._id === postID);
   if (!searchResults[postIndex].likes.includes(userID)) {
     try {
-      const response = await axios.put('http://localhost:4000/posts/like', {
+      const response = await axios.put('https://localhost:4000/posts/like', {
         postID,
         userID,
       }, {
-        headers: {
-          'Authorization': `Bearer ${cookies.access_token}`
-        },
+      
         withCredentials: true
       });
 
@@ -72,7 +70,7 @@ const likePost = async (postID) => {
 
 const savePost = async (postID) => {
   try {
-  const response = await axios.put("http://localhost:4000/posts", {
+  const response = await axios.put("https://localhost:4000/posts", {
   postID,
   userID,
   });
@@ -85,13 +83,10 @@ const unlikePost = async (postID) => {
   const postIndex = searchResults.findIndex(post => post._id === postID);
   if (searchResults[postIndex].likes.includes(userID)) {
     try {
-      const response = await axios.put('http://localhost:4000/posts/unlike', {
+      const response = await axios.put('https://localhost:4000/posts/unlike', {
         postID,
         userID,
       }, {
-        headers: {
-          'Authorization': `Bearer ${cookies.access_token}`
-        },
         withCredentials: true
       });
 

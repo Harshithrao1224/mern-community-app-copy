@@ -80,7 +80,7 @@
   background-color:white;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  margin: 0 auto;
   width: 40%;
   }
   
@@ -233,6 +233,7 @@ flex-wrap: wrap;
   
   .home-container,.search-results-container {
   width: 70vw;
+  margin:0 auto;
   }
   .img-fluid{
     width:60%;
@@ -246,4 +247,76 @@ flex-wrap: wrap;
     text-align: center; /* Horizontally center the "+" symbol */
     border-radius: 15px;
   }
+  .search-button{
+    background-color:rgba(33, 33, 170, 0.777);
+    font-weight: 16px;
+    color: white;
+    height: 100%;
+    width: 30%;
+    margin-left: 30px;
+    
+
+  }
+  .search-bar{
+    height: 100%;
+    width: 30%;
+    margin-left: 40px;
+    border-radius: 0 5px 0 5px blue;
+   
+
+  }
+  .card-title-edit  {
+    background-color: #00A35C;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 30px;
+    border: none;
+    cursor: pointer;
+    float:right;
+  }
+  
+  /* Add a hover effect */
+  .card-body button:hover {
+    background-color: darkgreen;
+  }
+  .card-title-del{
+
+    background-color:red;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 30px;
+    border: none;
+    cursor: pointer;
+    float:right;
+  }
+  .card-title-unsave{
+    background-color:rgb(230, 14, 14);
+    color: white;
+    padding: 10px 20px;
+    
+    border: none;
+    cursor: pointer;
+   
+    
+  }
+  .like{
+    background-color: #00a35cbe;
+    width: 60px;
+    height: 40px;
+    color: #F8F9FA;
+    border-radius: 20px;
+  }
+  .unlike{
+    background-color: #00a35cbe;
+    width: 60px;
+    height: 40px;
+    color: #F8F9FA;
+    border-radius: 20px;
+    padding:4px;
+  }
+  .like-count{
+    font-size: 3vh;
+    margin-left: 30px;
+  }
+
   
